@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.github.pannowak.mealsadvisor.gui.views.planning.controller.PlanningViewController">
+    <top>
+        <HBox spacing="8.0" alignment="CENTER_LEFT">
+            <padding>
+                <Insets left="8.0" right="8.0"/>
+            </padding>
+            <VBox spacing="8.0" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets top="8.0"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <Label text="Od:"/>
+                    <ComboBox fx:id="startWeekDayComboBox" promptText="Wybierz dzień tygodnia..."
+                              maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <Label text="Do:"/>
+                    <ComboBox fx:id="endWeekDayComboBox" promptText="Wybierz dzień tygodnia..."
+                              maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                </HBox>
+            </VBox>
+            <Button fx:id="drawButton" text="Losuj" onAction="#drawMeals"/>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="drawnMealsTable">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+            </BorderPane.margin>
+            <placeholder>
+                <Label text="Wybierz zakres dni i wciśnij przycisk &quot;Losuj&quot;"/>
+            </placeholder>
+            <columns>
+                <TableColumn fx:id="weekColumn" text="Dzień tygodnia" reorderable="false"/>
+            </columns>
+        </TableView>
+    </center>
+    <bottom>
+        <FlowPane alignment="CENTER_RIGHT" hgap="8">
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0"/>
+            </BorderPane.margin>
+            <Button fx:id="shoppingListButton" text="Generuj listę zakupów" onAction="#generateShoppingList"/>
+        </FlowPane>
+    </bottom>
+</BorderPane>

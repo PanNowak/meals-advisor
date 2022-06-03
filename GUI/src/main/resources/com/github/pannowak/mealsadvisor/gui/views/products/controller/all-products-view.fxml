@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.github.pannowak.mealsadvisor.gui.views.products.controller.AllProductsViewController">
+    <top>
+        <TextField fx:id="searchField" promptText="Rozpocznij wyszukiwanie...">
+            <BorderPane.margin>
+                <Insets left="8.0" right="8.0" top="8.0"/>
+            </BorderPane.margin>
+        </TextField>
+    </top>
+    <center>
+        <ListView fx:id="productsListView">
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+            </BorderPane.margin>
+        </ListView>
+    </center>
+    <bottom>
+        <FlowPane alignment="CENTER_RIGHT" hgap="8">
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0"/>
+            </BorderPane.margin>
+            <Button onAction="#switchToAddView" text="Dodaj produkt"/>
+            <Button fx:id="editButton" disable="true" onAction="#switchToEditView" text="Edytuj produkt"/>
+            <Button fx:id="deleteButton" disable="true" onAction="#deleteSelectedProduct" text="Usuń produkt"/>
+        </FlowPane>
+    </bottom>
+</BorderPane>

@@ -1,0 +1,30 @@
+<div mat-dialog-content>
+  <table mat-table [dataSource]="groceryItems">
+    <ng-container matColumnDef="product">
+      <th mat-header-cell *matHeaderCellDef>Produkt</th>
+      <td mat-cell *matCellDef="let groceryItem">
+        {{groceryItem.productSummary.name}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Ilość</th>
+      <td mat-cell *matCellDef="let groceryItem">
+        {{groceryItem.numberOfUnits}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="unit">
+      <th mat-header-cell *matHeaderCellDef>Jednostka</th>
+      <td mat-cell *matCellDef="let groceryItem">
+        {{groceryItem.unit.name}}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let groceryItem; columns: displayedColumns" class="highlight"></tr>
+  </table>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Zamknij</button>
+</div>

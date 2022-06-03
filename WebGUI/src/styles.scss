@@ -1,0 +1,53 @@
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+table {
+  width: 100%;
+  table-layout: auto;
+  border: 1px solid #dee2e6;
+  border-bottom: none;
+}
+
+tr.highlight:hover {
+  background: whitesmoke;
+}
+
+tr.highlight:active {
+  background: #efefef;
+}
+
+.main-padding {
+  padding: 1.25rem
+}
+
+.mat-paginator {
+  border: 1px solid #dee2e6;
+  border-top: none;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-dialog-actions {
+  float: right;
+}
+
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.float-right {
+  float: right;
+}

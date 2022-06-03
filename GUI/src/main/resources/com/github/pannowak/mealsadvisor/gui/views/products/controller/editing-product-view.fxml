@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.github.pannowak.mealsadvisor.gui.views.products.controller.EditingProductViewController">
+    <top>
+        <VBox spacing="8.0">
+            <padding>
+                <Insets left="8.0" right="8.0" top="8.0"/>
+            </padding>
+            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                <Label text="Nazwa:"/>
+                <TextField fx:id="nameField" maxWidth="Infinity" promptText="Podaj nazwę produktu..."
+                           HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                <Label text="Preferowana jednostka:"/>
+                <ComboBox fx:id="unitComboBox" maxWidth="Infinity" promptText="Wybierz jednostkę..."
+                          HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <fx:include source="unit-table-view.fxml" fx:id="unitTableView"/>
+    </center>
+    <bottom>
+        <FlowPane alignment="CENTER_RIGHT" hgap="8">
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0"/>
+            </BorderPane.margin>
+            <Button fx:id="saveButton" disable="true" onAction="#saveAndSwitch" text="Zapisz"/>
+            <Button onAction="#switchToAllProductsView" text="Anuluj"/>
+        </FlowPane>
+    </bottom>
+</BorderPane>

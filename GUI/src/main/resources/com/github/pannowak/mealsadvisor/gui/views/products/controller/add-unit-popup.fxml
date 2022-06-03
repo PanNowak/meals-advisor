@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.PopOver?>
+<PopOver fx:id="popOver" arrowLocation="RIGHT_TOP" detachable="false"
+         xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="com.github.pannowak.mealsadvisor.gui.views.products.controller.AddUnitPopupController" >
+    <contentNode>
+        <VBox prefWidth="370" spacing="8.0">
+            <padding>
+                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+            </padding>
+            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                <Label text="Nazwa jednostki:"/>
+                <ComboBox fx:id="comboBox" promptText="Wybierz jednostkę..."
+                          HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            </HBox>
+            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                <Label text="Ile w j. pref.:"/>
+                <TextField fx:id="ratioField" promptText="Podaj, ile mieści się w j. preferowanej"
+                           HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            </HBox>
+            <AnchorPane>
+                <Button fx:id="addButton" disable="true" onAction="#addUnit"
+                        text="Dodaj" AnchorPane.rightAnchor="0"/>
+            </AnchorPane>
+        </VBox>
+    </contentNode>
+</PopOver>

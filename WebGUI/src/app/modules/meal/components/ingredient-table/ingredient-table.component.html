@@ -1,0 +1,47 @@
+<table mat-table [dataSource]="ingredients$">
+  <ng-container [matColumnDef]=displayedColumns[0]>
+    <th mat-header-cell *matHeaderCellDef style="width: 33%">Produkt</th>
+    <td mat-cell *matCellDef="let ingredient" style="width: 33%">
+      {{ingredient.product.name}}
+    </td>
+  </ng-container>
+
+  <ng-container [matColumnDef]=displayedColumns[1]>
+    <th mat-header-cell *matHeaderCellDef style="width: 33%">Ilość</th>
+    <td mat-cell *matCellDef="let ingredient" style="width: 33%">
+      {{ingredient.numberOfUnits}}
+    </td>
+  </ng-container>
+
+  <ng-container [matColumnDef]=displayedColumns[2]>
+    <th mat-header-cell *matHeaderCellDef style="width: 33%">Jednostka</th>
+    <td mat-cell *matCellDef="let ingredient" style="width: 33%">
+      {{ingredient.unit.name}}
+    </td>
+  </ng-container>
+
+  <ng-container [matColumnDef]=displayedColumns[3]>
+    <th mat-header-cell *matHeaderCellDef>
+      <button [disabled]="isNoProductAvailable$ | async"
+              mat-icon-button color="primary" (click)="addIngredient()"
+              matTooltip="Dodaj składnik" matTooltipPosition="left" matTooltipShowDelay="1000">
+        <mat-icon>add</mat-icon>
+      </button>
+    </th>
+    <td mat-cell *matCellDef="let ingredient">
+      <button mat-icon-button color="primary" (click)="deleteIngredient(ingredient)"
+              matTooltip="Usuń składnik" matTooltipPosition="left" matTooltipShowDelay="1000">
+        <mat-icon>close</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let ingredient; columns: displayedColumns;"></tr>
+
+  <tr *matNoDataRow class="mat-row">
+    <td class="mat-cell" [colSpan]="displayedColumns.length">
+      Brak składników
+    </td>
+  </tr>
+</table>

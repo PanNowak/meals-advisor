@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "meals-advisor.backend.name" . }}
+  labels:
+    {{- include "meals-advisor.backend.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "meals-advisor.backend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.backend.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "meals-advisor.backend.selectorLabels" . | nindent 8 }}
+    {{- with .Values.backend }}
+    spec:
+      containers:
+      - name: web-server
+        {{- with .image }}
+        image: "{{ .repository }}:{{ .tag | default $.Chart.AppVersion }}"
+        imagePullPolicy: {{ .pullPolicy }}
+        {{- end }}
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        {{- with .probe }}
+        livenessProbe:
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8081
+        readinessProbe:
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8081
+        {{- end }}
+        resources:
+          {{- toYaml .resources | nindent 10 }}
+        securityContext:
+          {{- toYaml .securityContext | nindent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /config/application.properties
+          subPath: application.properties
+          readOnly: true
+        - name: secrets
+          mountPath: /secrets
+          readOnly: true
+      securityContext:
+        {{- toYaml .podSecurityContext | nindent 8 }}
+    {{- end }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "meals-advisor.backend.configName" . }} 
+      - name: secrets
+        secret:
+          secretName: {{ include "meals-advisor.backend.secretName" . }} 
+          defaultMode: 0600

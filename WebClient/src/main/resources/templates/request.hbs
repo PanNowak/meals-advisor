@@ -1,0 +1,18 @@
+
+=================================== HTTP REQUEST ===================================
+Prefix:             {{prefix}}
+Request Method:     <[{{method}}]>
+Request URL:        {{url}}
+{{#if headers}}
+Request Headers:
+{{#each headers}}
+ - {{@key}} : {{this}}
+{{/each}}
+{{else}}
+No Request Headers
+{{/if}}
+{{#if body}}
+Request Body:
+{{body}}
+{{/if}}
+====================================================================================

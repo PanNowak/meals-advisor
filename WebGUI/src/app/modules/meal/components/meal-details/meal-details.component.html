@@ -1,0 +1,27 @@
+<mat-form-field>
+  <mat-label>Nazwa posiłku</mat-label>
+  <label>
+    <input matInput [formControl]="nameControl" placeholder="Podaj nazwę posiłku...">
+  </label>
+  <mat-error *ngIf="nameControl.hasError('required')">Pole wymagane</mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Typ posiłku</mat-label>
+  <mat-select [formControl]="mealTypesControl" [compareWith]="areMealTypesEqual" multiple>
+    <mat-option *ngFor="let mealType of allMealTypes$ | async" [value]="mealType">
+      {{mealType.name}}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="mealTypesControl.hasError('required')">Pole wymagane</mat-error>
+</mat-form-field>
+
+<app-ingredient-table></app-ingredient-table>
+
+<div class="float-right additional-space">
+  <button mat-flat-button color="primary"
+          [disabled]="isAnyInputMissing() || (noIngredientsAdded$ | async)" (click)="saveMeal()"
+          matTooltip="Wypełnij wszystkie obowiązkowe pola" matTooltipPosition="left"
+          [matTooltipDisabled]="!(isAnyInputMissing() && noIngredientsAdded$ | async)">Zapisz</button>
+  <button mat-flat-button color="primary" (click)="closeView()">Powrót</button>
+</div>

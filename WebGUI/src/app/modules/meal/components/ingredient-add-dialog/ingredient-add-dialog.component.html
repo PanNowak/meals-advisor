@@ -1,0 +1,44 @@
+<div mat-dialog-content>
+  <p>
+    <mat-form-field>
+      <mat-label>Produkt</mat-label>
+      <mat-select [formControl]="selectedProductControl" [compareWith]="areProductsEqual">
+        <mat-option *ngFor="let product of availableProducts$ | async" [value]="product">
+          {{product.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="selectedProductControl.hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field>
+      <mat-label>Ilość</mat-label>
+      <label>
+        <input matInput [formControl]="amountControl" placeholder="Podaj ilość składnika">
+      </label>
+      <mat-error *ngIf="amountControl.hasError('required')">
+        Pole wymagane
+      </mat-error>
+      <mat-error *ngIf="amountControl.hasError('pattern') && !amountControl.hasError('required')">
+        Podaj dane liczbowe
+      </mat-error>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field>
+      <mat-label>Jednostka</mat-label>
+      <mat-select [formControl]="selectedUnitControl" [compareWith]="areUnitsEqual">
+        <mat-option *ngFor="let unit of availableUnits" [value]="unit">
+          {{unit.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="selectedUnitControl.hasError('required')">Pole wymagane</mat-error>
+    </mat-form-field>
+  </p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [disabled]="isAnyInputIncorrect()" (click)="addIngredient()"
+          matTooltip="Wypełnij wszystkie obowiązkowe pola" matTooltipPosition="left"
+          [matTooltipDisabled]="!isAnyInputIncorrect()">Zapisz</button>
+  <button mat-button (click)="dialogRef.close()">Anuluj</button>
+</div>

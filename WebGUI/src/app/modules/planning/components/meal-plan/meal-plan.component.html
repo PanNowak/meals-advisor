@@ -1,0 +1,49 @@
+<div class="main-padding">
+  <mat-form-field>
+    <mat-label>Pierwszy dzień</mat-label>
+    <mat-select [formControl]="firstDayControl">
+      <mat-option *ngFor="let weekDay of weekDays" [value]="weekDay.dayNumber">
+        {{weekDay.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Ostatni dzień</mat-label>
+    <mat-select [formControl]="lastDayControl">
+      <mat-option *ngFor="let weekDay of weekDays" [value]="weekDay.dayNumber">
+        {{weekDay.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <table *ngIf="isPlanAlreadyGenerated$ | async" mat-table [dataSource]="dayPlans$" style="margin-bottom: 12px">
+    <ng-container matColumnDef="dayOfWeek">
+      <th mat-header-cell *matHeaderCellDef>Dzień tygodnia</th>
+      <td mat-cell *matCellDef="let dayPlan">
+        {{weekDays[dayPlan.dayOfWeek - 1].name}}
+      </td>
+    </ng-container>
+
+    <ng-container *ngFor="let mealType of mealTypes$ | async" [matColumnDef]="mealType.name">
+      <th mat-header-cell *matHeaderCellDef>{{mealType.name}}</th>
+      <td mat-cell *matCellDef="let dayPlan">
+        {{getMealName(mealType, dayPlan)}}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns$ | async"></tr>
+    <tr mat-row *matRowDef="let dayPlan; columns: displayedColumns$ | async" class="highlight">
+    </tr>
+  </table>
+
+  <div class="float-right additional-space">
+    <button mat-flat-button color="primary"
+            [disabled]="isAnySelectionMissing()" (click)="generatePlans()"
+            matTooltip="Wybierz zakres dni" matTooltipPosition="left" [matTooltipDisabled]="!isAnySelectionMissing()">
+      {{(isPlanAlreadyGenerated$ | async) ? 'Wylosuj ponownie' : 'Wylosuj posiłki'}}
+    </button>
+    <button *ngIf="isPlanAlreadyGenerated$ | async" mat-flat-button color="primary" (click)="showShoppingList()">
+      Pokaż listę zakupów
+    </button>
+  </div>
+</div>

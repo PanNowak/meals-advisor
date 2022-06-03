@@ -1,0 +1,17 @@
+
+================================== HTTP RESPONSE ===================================
+Connection ID:      {{id}}
+Response Code:      {{code}}
+{{#if headers}}
+Response Headers:
+{{#each headers}}
+ - {{@key}} : {{this}}
+{{/each}}
+{{else}}
+No Response Headers
+{{/if}}
+{{#if body}}
+Response Body:
+{{body}}
+{{/if}}
+====================================================================================

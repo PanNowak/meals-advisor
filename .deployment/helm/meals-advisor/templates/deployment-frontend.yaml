@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "meals-advisor.frontend.name" . }}
+  labels:
+    {{- include "meals-advisor.frontend.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "meals-advisor.frontend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.frontend.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "meals-advisor.frontend.selectorLabels" . | nindent 8 }}
+    {{- with .Values.frontend }}
+    spec:
+      containers:
+      - name: web-gui
+        {{- with .image }}
+        image: "{{ .repository }}:{{ .tag | default $.Chart.AppVersion }}"
+        imagePullPolicy: {{ .pullPolicy }}
+        {{- end }}
+        env:
+        - name: API_ADDRESS
+          value: {{ include "meals-advisor.backend.name" $ | printf "http://%s" | quote }}
+        ports:
+        - name: http
+          containerPort: 4000
+          protocol: TCP
+        {{- with .probe }}
+        livenessProbe:
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          httpGet:
+            path: /
+            port: 4000
+        readinessProbe:
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          httpGet:
+            path: /
+            port: 4000
+        {{- end }}
+        resources:
+          {{- toYaml .resources | nindent 10 }}
+        securityContext:
+          {{- toYaml .securityContext | nindent 10 }}
+      securityContext:
+        {{- toYaml .podSecurityContext | nindent 8 }}
+    {{- end }}

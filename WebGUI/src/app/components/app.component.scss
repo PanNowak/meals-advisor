@@ -1,0 +1,21 @@
+.flex-full-height {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.bottom-image {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+}
+
+mat-sidenav {
+  width: 200px;
+}
+
+mat-sidenav-content {
+  overflow: scroll;
+}

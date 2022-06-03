@@ -1,0 +1,99 @@
+# Default values for meals-advisor-backend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+frontend:
+  replicaCount: 1
+
+  image:
+    repository: pannowak/meals-advisor-web-gui
+    tag: latest
+
+  podAnnotations: {}
+  
+  probe:
+    initialDelaySeconds: 20
+    periodSeconds: 15
+    timeoutSeconds: 3
+
+  podSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+
+  securityContext:
+    readOnlyRootFilesystem: true
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 100Mi
+    limits:
+      cpu: 400m
+      memory: 200Mi
+
+  service:
+    type: LoadBalancer
+    port: 80
+ 
+backend:
+  replicaCount: 1
+
+  image:
+    repository: pannowak/meals-advisor-web-server
+    tag: latest 
+  
+  podAnnotations: {}
+
+  probe:
+    initialDelaySeconds: 60
+    periodSeconds: 15
+    timeoutSeconds: 1
+
+  podSecurityContext: 
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+
+  securityContext: 
+    readOnlyRootFilesystem: true
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 750Mi
+    limits:
+      cpu: 1
+      memory: 1500Mi 
+
+  service:
+    type: ClusterIP
+    port: 80
+
+## External Database Configuration
+##
+externalDatabase:
+  ## @param externalDatabase.host Server host
+  ##
+  host: meals-advisor-database
+  ## @param externalDatabase.port Server port
+  ##
+  port: 5432
+  ## @param externalDatabase.database Database name
+  ##
+  database: my_db
+  ## @param externalDatabase.schema Current schema
+  ##
+  schema: my_schema
+  ## @param externalDatabase.username Name of the user to log in as
+  ##
+  username: my_user
+  ## @param externalDatabase.password Password of the provided user
+  ##
+  password: ""
+  ## @param externalDatabase.existingConfiguration The name of an existing configMap
+  ## NOTE: When it's set, the `jdbcUrl` and `username` parameters are ignored
+  ##
+  existingConfiguration: ""
+  ## @param externalDatabase.existingSecret The name of an existing secret
+  ## NOTE: When it's set, the `password` parameter is ignored
+  existingSecret: ""
+

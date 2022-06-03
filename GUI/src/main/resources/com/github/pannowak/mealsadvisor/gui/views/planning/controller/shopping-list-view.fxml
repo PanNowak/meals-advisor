@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.pannowak.mealsadvisor.gui.views.planning.controller.ShoppingListViewController">
+    <top>
+        <Label text="Lista zakupów">
+            <font>
+                <Font name="Helvetica Light" size="20.0"/>
+            </font>
+            <BorderPane.margin>
+                <Insets left="8.0" right="8.0" top="8.0"/>
+            </BorderPane.margin>
+        </Label>
+    </top>
+    <center>
+        <TableView fx:id="groceryItemsTable">
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+            </BorderPane.margin>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <placeholder>
+                <Label/>
+            </placeholder>
+            <columns>
+                <TableColumn fx:id="productColumn" text="Produkt" reorderable="false"/>
+                <TableColumn fx:id="amountColumn" text="Ilość" reorderable="false"/>
+                <TableColumn fx:id="unitColumn" text="Jednostka" reorderable="false"/>
+            </columns>
+        </TableView>
+    </center>
+    <bottom>
+        <FlowPane alignment="CENTER_RIGHT" hgap="8">
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0"/>
+            </BorderPane.margin>
+            <Button onAction="#switchToPlanningView" text="Powrót"/>
+        </FlowPane>
+    </bottom>
+</BorderPane>

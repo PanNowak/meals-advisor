@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins: slave
+spec:
+  containers:
+  - args:
+    - 9999999
+    command:
+    - sleep
+    env:
+    - name: DOCKER_HOST
+      value: "tcp://127.0.0.1:2475"
+    image: "adoptopenjdk:15-jdk-hotspot"
+    imagePullPolicy: IfNotPresent
+    name: jdk
+    volumeMounts:
+    - name: maven-repo
+      mountPath: /root/.m2
+    workingDir: /var/jenkins
+  - args:
+    - "server"
+    command:
+    - /app/kubedock
+    image: "joyrex2001/kubedock:0.6.2"
+    imagePullPolicy: IfNotPresent
+    name: kubedock
+    workingDir: /var/jenkins
+  - args:
+    - 9999999
+    command:
+    - sleep
+    image: "gcr.io/kaniko-project/executor:debug"
+    imagePullPolicy: IfNotPresent
+    name: kaniko
+    volumeMounts:
+    - name: kaniko-secret
+      mountPath: /kaniko/.docker
+    workingDir: /var/jenkins
+  - args:
+    - 9999999
+    command:
+    - sleep
+    image: "alpine/helm:3.7.1"
+    name: helm
+    securityContext:
+      runAsUser: 1000
+    workingDir: /var/jenkins
+  restartPolicy: Never
+  serviceAccountName: helm-jenkins
+  volumes:
+  - name: maven-repo
+    persistentVolumeClaim:
+      claimName: maven-repo-pvc
+  - name: kaniko-secret
+    secret:
+      secretName: dockercred
+      items:
+      - key: .dockerconfigjson
+        path: config.json

@@ -1,0 +1,29 @@
+<mat-form-field>
+  <mat-label>Nazwa produktu</mat-label>
+  <label>
+    <input matInput [formControl]="nameControl" placeholder="Podaj nazwę produktu...">
+  </label>
+  <mat-error *ngIf="nameControl.hasError('required')">Pole wymagane</mat-error>
+  <mat-error *ngIf="nameControl.hasError('duplicate')">
+    Produkt o podanej nazwie już istnieje
+  </mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Preferowana jednostka</mat-label>
+  <mat-select [formControl]="primaryUnitControl" [compareWith]="areUnitsEqual">
+    <mat-option *ngFor="let unit of availablePrimaryUnits$ | async" [value]="unit">
+      {{unit.name}}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="primaryUnitControl.hasError('required')">Pole wymagane</mat-error>
+</mat-form-field>
+
+<app-secondary-unit-table></app-secondary-unit-table>
+
+<div class="float-right additional-space">
+  <button mat-flat-button color="primary" [disabled]="isValidationFailed$ | async" (click)="saveProduct()"
+          [matTooltip]="validationMessage$ | async" matTooltipPosition="left"
+          [matTooltipDisabled]="!(isValidationFailed$ | async)">Zapisz</button>
+  <button mat-flat-button color="primary" (click)="closeView()">Powrót</button>
+</div>

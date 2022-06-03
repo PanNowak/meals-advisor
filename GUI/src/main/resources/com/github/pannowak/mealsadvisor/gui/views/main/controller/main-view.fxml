@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<SplitPane dividerPositions="0.4" prefHeight="400.0" prefWidth="800.0"
+           xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.github.pannowak.mealsadvisor.gui.views.main.controller.MainViewController">
+    <BorderPane style="-fx-border-color: black;">
+        <top>
+            <Label text="Wybierz opcję">
+                <font>
+                    <Font name="Helvetica Light" size="30.0"/>
+                </font>
+                <BorderPane.margin>
+                    <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                </BorderPane.margin>
+            </Label>
+        </top>
+        <center>
+            <ListView style="-fx-control-inner-background-alt: -fx-control-inner-background"
+                      fx:id="views" editable="true">
+                <BorderPane.margin>
+                    <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                </BorderPane.margin>
+            </ListView>
+        </center>
+        <bottom>
+            <FlowPane alignment="CENTER">
+                <padding>
+                    <Insets bottom="8.0"/>
+                </padding>
+                <ImageView fx:id="imageView">
+                    <Image url="/pusheen.png"/>
+                </ImageView>
+            </FlowPane>
+        </bottom>
+    </BorderPane>
+    <StackPane>
+        <BorderPane fx:id="secondView" style="-fx-border-color: black;">
+            <center>
+                <ListView/>
+            </center>
+        </BorderPane>
+<!--        -->
+        <ProgressIndicator fx:id="progressIndicator" visible="false"/>
+<!--        TODO-->
+    </StackPane>
+</SplitPane>

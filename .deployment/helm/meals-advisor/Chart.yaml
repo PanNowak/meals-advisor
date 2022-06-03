@@ -1,0 +1,9 @@
+apiVersion: v2
+name: meals-advisor
+description: A Helm chart for Meals Advisor Application
+type: application
+version: 1.0.0
+maintainers:
+  - name: pannowak
+    url: "https://github.com/PanNowak"
+appVersion: "1.0-SNAPSHOT"

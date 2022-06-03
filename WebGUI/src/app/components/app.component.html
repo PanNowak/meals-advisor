@@ -1,0 +1,25 @@
+<div *ngIf="isLoading$ | async" class="loading-shade">
+  <mat-spinner></mat-spinner>
+</div>
+<div class="flex-full-height">
+  <mat-toolbar color="primary" class="mat-elevation-z8">
+    <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu></mat-menu>
+    <span>{{title}}</span>
+  </mat-toolbar>
+  <mat-sidenav-container [hasBackdrop]="true" class="flex-fill" style="flex:1 1 auto">
+    <mat-sidenav #sidenav mode="over">
+      <div *ngFor="let buttonInfo of routingButtonInfos" (click)="navigate(buttonInfo.navigationAction)">
+        <button mat-menu-item (click)="sidenav.toggle()" (mouseover)="imgLink = buttonInfo.imageLink">
+          {{buttonInfo.label}}
+        </button>
+      </div>
+      <img [src]="imgLink" alt="Pusheen image representing category" class="bottom-image">
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

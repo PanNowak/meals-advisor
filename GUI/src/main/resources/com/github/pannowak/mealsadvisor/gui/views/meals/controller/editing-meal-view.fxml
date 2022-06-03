@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.CheckComboBox?>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.pannowak.mealsadvisor.gui.views.meals.controller.EditingMealViewController">
+    <top>
+        <VBox spacing="8.0">
+            <padding>
+                <Insets left="8.0" right="8.0" top="8.0"/>
+            </padding>
+            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                <Label text="Nazwa:"/>
+                <TextField fx:id="nameField" promptText="Podaj nazwę dania..." HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                <Label text="Typ posiłku:"/>
+                <CheckComboBox fx:id="mealTypeComboBox" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <fx:include source="ingredient-table-view.fxml" fx:id="ingredientTableView"/>
+    </center>
+    <bottom>
+        <FlowPane alignment="CENTER_RIGHT" hgap="8">
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0"/>
+            </BorderPane.margin>
+            <Button fx:id="saveButton" disable="true" onAction="#saveAndSwitch" text="Zapisz"/>
+            <Button text="Anuluj" onAction="#switchToAllMealsView"/>
+        </FlowPane>
+    </bottom>
+</BorderPane>

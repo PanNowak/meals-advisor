@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<StackPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.github.pannowak.mealsadvisor.gui.views.products.controller.UnitTableViewController">
+    <padding>
+        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+    </padding>
+    <TableView fx:id="unitTable">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+        <placeholder>
+            <Label text="Dodaj inne jednostki adekwatne dla produktu"/>
+        </placeholder>
+        <columns>
+            <TableColumn fx:id="unitColumn" text="Nazwa" reorderable="false"/>
+            <TableColumn fx:id="toPrimaryUnitRatioColumn" text="Ile w j. preferowanej" reorderable="false"/>
+        </columns>
+    </TableView>
+    <HBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="3.0" StackPane.alignment="BOTTOM_RIGHT">
+        <StackPane.margin>
+            <Insets bottom="3.0" right="3.0"/>
+        </StackPane.margin>
+        <Button fx:id="addButton" disable="true" text="+">
+            <padding>
+                <Insets bottom="1" left="4" right="4"/>
+            </padding>
+            <font>
+                <Font name="System Bold" size="13.0"/>
+            </font>
+        </Button>
+        <Button fx:id="deleteButton" disable="true" onAction="#removeSecondaryUnit" text="-">
+            <padding>
+                <Insets bottom="1" left="5" right="5"/>
+            </padding>
+            <font>
+                <Font name="System Bold" size="13.0"/>
+            </font>
+        </Button>
+    </HBox>
+</StackPane>
