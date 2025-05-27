@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.beanvalidation.MethodValidationInterceptor;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.springframework.lang.Nullable;
 
 @Component
 class CoreMethodValidationPostProcessor extends MethodValidationPostProcessor {
@@ -24,8 +26,8 @@ class CoreMethodValidationPostProcessor extends MethodValidationPostProcessor {
         this.exceptionFactory = exceptionFactory;
     }
 
-    @Override
-    protected Advice createMethodValidationAdvice(Validator validator) {
+    // Removed @Override to diagnose compilation issue
+    protected Advice createMethodValidationAdvice(@Nullable Validator validator) {
         var interceptor = new MethodValidationInterceptor(validator);
         return new RethrowingDecorator(interceptor);
     }

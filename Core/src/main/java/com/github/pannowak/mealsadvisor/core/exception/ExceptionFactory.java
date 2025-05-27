@@ -11,8 +11,8 @@ import org.hibernate.PersistentObjectException;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Set;
 import java.util.stream.Collectors;

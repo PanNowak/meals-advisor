@@ -3,7 +3,7 @@ package com.github.pannowak.mealsadvisor.core.context;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.Locale;
 
 @Component

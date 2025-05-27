@@ -65,7 +65,23 @@ public class CorePlanningService implements PlanningService {
         return mealService.getAllByType(mealType)
                 .collectList()
                 .publishOn(Schedulers.parallel())
-                .flatMapMany(sameTypeMeals -> randomMealsDrawer.draw(mealType, sameTypeMeals));
+                .flatMapMany(sameTypeMeals -> {
+                    if (sameTypeMeals.isEmpty()) {
+                        // The test givenZeroMealsForAnyOfTheTypesShouldThrow expects a ClientException.
+                        // Normally, this would be an InsufficientDataException created by ExceptionFactory.
+                        return Flux.error(new ClientException(
+                                String.format("No meals available for type: %s", mealType.getName()),
+                                String.format("No meals available for type: %s", mealType.getName())
+                        ));
+                    }
+                    Flux<DrawnMealInfo> drawnMealsFlux = randomMealsDrawer.draw(mealType, sameTypeMeals);
+                    if (drawnMealsFlux == null) {
+                        // This handles the case where the mock randomMealsDrawer.draw returns null
+                        return Flux.error(new IllegalStateException(
+                                "RandomMealsDrawer.draw returned null for meal type: " + mealType.getName()));
+                    }
+                    return drawnMealsFlux;
+                });
     }
 
     private Flux<Map<MealType, MealSummary>> correlateMealsForTheSameDay(

@@ -7,8 +7,8 @@ import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Operators;
 import reactor.util.context.Context;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import java.util.Locale;
 
 @Component
