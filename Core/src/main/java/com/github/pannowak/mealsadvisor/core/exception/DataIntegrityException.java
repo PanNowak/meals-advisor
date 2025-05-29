@@ -8,6 +8,7 @@ final class DataIntegrityException extends ClientException {
     private final String localizedMessage;
 
     DataIntegrityException(String message, String localizedMessage, Throwable cause) {
+        super(message);
         initCause(cause);
         this.message = message;
         this.localizedMessage = localizedMessage;

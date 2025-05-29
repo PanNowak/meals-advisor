@@ -259,18 +259,51 @@ class CorePlanningServiceTest {
         given(mealService.getAllTypes()).willReturn(Flux.fromIterable(TEST_MEAL_TYPES));
         given(mealService.getAllByType(eq(BREAKFAST))).willReturn(Flux.fromIterable(BREAKFASTS));
         given(mealService.getAllByType(eq(LUNCH))).willReturn(Flux.fromIterable(LUNCHES));
+
+        List<RandomMealsDrawer.DrawnMealInfo> breakfastInfos = BREAKFASTS.stream()
+                .map(summary -> new RandomMealsDrawer.DrawnMealInfo(BREAKFAST, summary))
+                .collect(Collectors.toList());
+        given(randomMealsDrawer.draw(eq(BREAKFAST), eq(BREAKFASTS))).willReturn(Flux.fromIterable(breakfastInfos).repeat()); // Repeat indefinitely
+
+        List<RandomMealsDrawer.DrawnMealInfo> lunchInfos = LUNCHES.stream()
+                .map(summary -> new RandomMealsDrawer.DrawnMealInfo(LUNCH, summary))
+                .collect(Collectors.toList());
+        given(randomMealsDrawer.draw(eq(LUNCH), eq(LUNCHES))).willReturn(Flux.fromIterable(lunchInfos).repeat()); // Repeat indefinitely
     }
 
     private void prepareSingleMockMealData() {
         given(mealService.getAllTypes()).willReturn(Flux.fromIterable(TEST_MEAL_TYPES));
-        given(mealService.getAllByType(eq(BREAKFAST))).willReturn(Flux.fromIterable(BREAKFASTS).take(1));
-        given(mealService.getAllByType(eq(LUNCH))).willReturn(Flux.fromIterable(LUNCHES).take(1));
+        List<MealSummary> singleBreakfastList = BREAKFASTS.stream().limit(1).collect(Collectors.toList());
+        List<MealSummary> singleLunchList = LUNCHES.stream().limit(1).collect(Collectors.toList());
+
+        given(mealService.getAllByType(eq(BREAKFAST))).willReturn(Flux.fromIterable(singleBreakfastList));
+        given(mealService.getAllByType(eq(LUNCH))).willReturn(Flux.fromIterable(singleLunchList));
+
+        List<RandomMealsDrawer.DrawnMealInfo> breakfastInfos = singleBreakfastList.stream()
+                .map(summary -> new RandomMealsDrawer.DrawnMealInfo(BREAKFAST, summary))
+                .collect(Collectors.toList());
+        // For a single meal, it should repeat that single meal
+        given(randomMealsDrawer.draw(eq(BREAKFAST), eq(singleBreakfastList))).willReturn(Flux.fromIterable(breakfastInfos).repeat());
+
+        List<RandomMealsDrawer.DrawnMealInfo> lunchInfos = singleLunchList.stream()
+                .map(summary -> new RandomMealsDrawer.DrawnMealInfo(LUNCH, summary))
+                .collect(Collectors.toList());
+        // For a single meal, it should repeat that single meal
+        given(randomMealsDrawer.draw(eq(LUNCH), eq(singleLunchList))).willReturn(Flux.fromIterable(lunchInfos).repeat());
     }
 
     private void prepareEmptyMockMealDataForOneOfTheTypes() {
         given(mealService.getAllTypes()).willReturn(Flux.fromIterable(TEST_MEAL_TYPES));
         given(mealService.getAllByType(eq(BREAKFAST))).willReturn(Flux.fromIterable(BREAKFASTS));
-        given(mealService.getAllByType(eq(LUNCH))).willReturn(Flux.empty());
+        given(mealService.getAllByType(eq(LUNCH))).willReturn(Flux.empty()); // This should trigger InsufficientDataException for LUNCH
+
+        // Stub for BREAKFAST type, as it's not empty
+        List<RandomMealsDrawer.DrawnMealInfo> breakfastInfos = BREAKFASTS.stream()
+                .map(summary -> new RandomMealsDrawer.DrawnMealInfo(BREAKFAST, summary))
+                .collect(Collectors.toList());
+        // Using lenient stubbing as this might not be strictly necessary if the LUNCH error propagates first
+        org.mockito.Mockito.lenient().when(randomMealsDrawer.draw(eq(BREAKFAST), eq(BREAKFASTS))).thenReturn(Flux.fromIterable(breakfastInfos).repeat());
+        // No stubbing for LUNCH type for randomMealsDrawer.draw, as it should not be called due to empty meal list
     }
 
     private List<DayPlan> generateDayPlans(int firstDay, int lastDay) {

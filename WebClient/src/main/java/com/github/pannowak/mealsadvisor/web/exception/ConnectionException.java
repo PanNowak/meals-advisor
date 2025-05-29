@@ -10,6 +10,7 @@ final class ConnectionException extends MealsAdvisorException {
     private final String localizedMessage;
 
     ConnectionException(String message, String localizedMessage, ConnectException cause) {
+        super(message);
         this.message = message;
         this.localizedMessage = localizedMessage;
         initCause(cause);

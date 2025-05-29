@@ -8,6 +8,7 @@ final class NonTransientEntityException extends ClientException {
     private final String localizedMessage;
 
     NonTransientEntityException(String message, String localizedMessage, Throwable cause) {
+        super(message);
         initCause(cause);
         this.message = message;
         this.localizedMessage = localizedMessage;

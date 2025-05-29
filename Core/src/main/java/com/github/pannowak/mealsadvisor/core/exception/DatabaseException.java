@@ -8,6 +8,7 @@ final class DatabaseException extends ServiceException {
     private final String localizedMessage;
 
     DatabaseException(String message, String localizedMessage, Throwable cause) {
+        super(message);
         initCause(cause);
         this.message = message;
         this.localizedMessage = localizedMessage;

@@ -8,6 +8,7 @@ final class WebClientException extends ClientException {
     private final String localizedMessage;
 
     WebClientException(String message, String localizedMessage) {
+        super(message);
         this.message = message;
         this.localizedMessage = localizedMessage;
     }

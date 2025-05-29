@@ -8,6 +8,7 @@ final class IllegalWeekDayException extends InvalidInputException {
     private final String localizedMessage;
 
     IllegalWeekDayException(String message, String localizedMessage) {
+        super(message);
         this.message = message;
         this.localizedMessage = localizedMessage;
     }

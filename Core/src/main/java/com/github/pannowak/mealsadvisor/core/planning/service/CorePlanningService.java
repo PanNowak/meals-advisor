@@ -8,6 +8,7 @@ import com.github.pannowak.mealsadvisor.api.planning.model.DayPlan;
 import com.github.pannowak.mealsadvisor.api.planning.model.GroceryItem;
 import com.github.pannowak.mealsadvisor.api.planning.service.PlanningService;
 import com.github.pannowak.mealsadvisor.api.products.model.Product;
+import com.github.pannowak.mealsadvisor.api.exception.InsufficientDataException;
 import com.github.pannowak.mealsadvisor.core.meals.service.CoreMealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -69,8 +70,7 @@ public class CorePlanningService implements PlanningService {
                     if (sameTypeMeals.isEmpty()) {
                         // The test givenZeroMealsForAnyOfTheTypesShouldThrow expects a ClientException.
                         // Normally, this would be an InsufficientDataException created by ExceptionFactory.
-                        return Flux.error(new ClientException(
-                                String.format("No meals available for type: %s", mealType.getName()),
+                        return Flux.error(new InsufficientDataException(
                                 String.format("No meals available for type: %s", mealType.getName())
                         ));
                     }

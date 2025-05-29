@@ -8,6 +8,7 @@ final class ValidationException extends ClientException {
     private final String localizedMessage;
 
     ValidationException(String message, String localizedMessage, Throwable cause) {
+        super(message);
         initCause(cause);
         this.message = message;
         this.localizedMessage = localizedMessage;
