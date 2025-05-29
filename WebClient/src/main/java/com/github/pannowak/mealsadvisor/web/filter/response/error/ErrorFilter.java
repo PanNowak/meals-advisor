@@ -5,10 +5,13 @@ import com.github.pannowak.mealsadvisor.web.filter.response.ResponseFilter;
 import com.github.pannowak.mealsadvisor.web.filter.response.error.ErrorTranslatorFactory.ErrorTranslator;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus; // Added import
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import reactor.core.publisher.Mono;
-import reactor.util.context.Context;
+import reactor.util.context.ContextView; // Changed import
 
 import java.net.ConnectException;
 
@@ -27,37 +30,37 @@ class ErrorFilter extends ResponseFilter {
 
     @Override
     protected Mono<ClientResponse> processResponse(ClientRequest request, Mono<ClientResponse> response) {
-        return Mono.subscriberContext()
-                .flatMap(context -> translate(request, response, context));
+        return Mono.deferContextual(Mono::just) // Changed here
+                .flatMap(contextView -> translate(request, response, contextView));
     }
 
     private Mono<ClientResponse> translate(ClientRequest request, Mono<ClientResponse> response,
-                                           Context context) {
-        return translateConnectivityErrors(request, response, context)
-                .flatMap(r -> translateIfErrorResponse(r, context));
+                                           ContextView contextView) { // Changed here
+        return translateConnectivityErrors(request, response, contextView)
+                .flatMap(r -> translateIfErrorResponse(r, contextView));
     }
 
     private Mono<ClientResponse> translateConnectivityErrors(ClientRequest request, Mono<ClientResponse> response,
-                                                             Context context) {
+                                                             ContextView contextView) { // Changed here
         return response
                 .onErrorMap(ConnectException.class, e -> {
-                    var exceptionFactory = exceptionFactoryProvider.get(context);
+                    var exceptionFactory = exceptionFactoryProvider.get(contextView); // Changed here
                     return exceptionFactory.connectionException(request, e);
                 });
         //TODO obsługa innych błędów
     }
 
-    private Mono<ClientResponse> translateIfErrorResponse(ClientResponse response, Context context) {
+    private Mono<ClientResponse> translateIfErrorResponse(ClientResponse response, ContextView contextView) { // Changed here
         if (response.statusCode().isError()) {
-            return translateErrorResponse(response, context);
+            return translateErrorResponse(response, contextView);
         } else {
             return Mono.just(response);
         }
     }
 
-    private Mono<ClientResponse> translateErrorResponse(ClientResponse response, Context context) {
+    private Mono<ClientResponse> translateErrorResponse(ClientResponse response, ContextView contextView) { // Changed here
         ErrorTranslator errorTranslator = errorTranslatorFactory
-                .getInstance(response.statusCode(), context);
+                .getInstance(HttpStatus.valueOf(response.statusCode().value()), contextView); // Changed response.statusCode() and context
         String logPrefix = response.logPrefix().strip();
         return response.bodyToMono(ErrorResponse.class)
                 .map(errorResponse -> errorTranslator.translate(logPrefix, errorResponse))

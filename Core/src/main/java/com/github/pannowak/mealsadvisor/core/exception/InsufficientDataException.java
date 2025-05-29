@@ -8,6 +8,7 @@ final class InsufficientDataException extends ClientException {
     private final String localizedMessage;
 
     InsufficientDataException(String message, String localizedMessage) {
+        super(message);
         this.message = message;
         this.localizedMessage = localizedMessage;
     }

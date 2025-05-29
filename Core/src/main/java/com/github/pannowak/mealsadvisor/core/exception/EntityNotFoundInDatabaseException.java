@@ -8,6 +8,7 @@ final class EntityNotFoundInDatabaseException extends EntityNotFoundException {
     private final String localizedMessage;
 
     EntityNotFoundInDatabaseException(String message, String localizedMessage) {
+        super(message);
         this.message = message;
         this.localizedMessage = localizedMessage;
     }

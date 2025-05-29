@@ -3,7 +3,7 @@ package com.github.pannowak.mealsadvisor.web.filter.response.log;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode; // Changed from HttpStatus
 import org.springframework.http.client.reactive.ClientHttpResponse;
 import org.springframework.http.client.reactive.ClientHttpResponseDecorator;
 import org.springframework.web.reactive.function.BodyExtractor;
@@ -60,7 +60,7 @@ final class LoggingBodyExtractor implements BodyExtractor<Flux<DataBuffer>, Clie
         }
 
         private ResponseInfo createResponseInfo(ClientResponse response, String body) {
-            HttpStatus status = response.statusCode();
+            HttpStatusCode status = response.statusCode(); // Changed here
             Map<String, String> headers = transformToMap(response.headers());
             return new ResponseInfo(response.logPrefix(), status.value(), headers, body);
         }

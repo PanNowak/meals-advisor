@@ -8,6 +8,7 @@ final class WebServiceException extends ServiceException {
     private final String localizedMessage;
 
     WebServiceException(String message, String localizedMessage) {
+        super(message);
         this.message = message;
         this.localizedMessage = localizedMessage;
     }
