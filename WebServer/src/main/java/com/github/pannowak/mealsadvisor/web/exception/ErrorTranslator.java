@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode; // Added import
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
@@ -32,7 +33,7 @@ class ErrorTranslator implements WebExceptionHandler {
         if (ex instanceof ResponseStatusException) {
             ResponseStatusException e = (ResponseStatusException) ex;
             if (e.getCause() != null) {
-                return new ResponseStatusException(e.getStatus(), e.getReason() + " -> " + e.getCause().getMessage(), e.getCause().getCause());
+                return new ResponseStatusException(e.getStatusCode(), e.getReason() + " -> " + e.getCause().getMessage(), e.getCause().getCause());
             }
             return e;
         } else {
@@ -76,18 +77,18 @@ class ErrorTranslator implements WebExceptionHandler {
     }
 
     private void logIfNecessary(ResponseStatusException exception) {
-        var status = exception.getStatus();
-        if (notLoggedByOtherHandlers(status)) {
-            var message = getErrorLogMessage(status);
+        var status = exception.getStatusCode();
+        if (notLoggedByOtherHandlers(status)) { // status is HttpStatusCode
+            var message = getErrorLogMessage(status); // status is HttpStatusCode
             log.error(message, exception);
         }
     }
 
-    private boolean notLoggedByOtherHandlers(HttpStatus status) {
-        return status != HttpStatus.INTERNAL_SERVER_ERROR;
+    private boolean notLoggedByOtherHandlers(HttpStatusCode status) { // Changed HttpStatus to HttpStatusCode
+        return !HttpStatus.INTERNAL_SERVER_ERROR.equals(status); // Compare with HttpStatus enum correctly
     }
 
-    private String getErrorLogMessage(HttpStatus status) {
+    private String getErrorLogMessage(HttpStatusCode status) { // Changed HttpStatus to HttpStatusCode
         var errorType = status.is4xxClientError() ? "Client" : "Service";
         return String.format("%s exception occurred", errorType);
     }

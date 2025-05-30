@@ -8,6 +8,7 @@ public final class MockNotFoundException extends EntityNotFoundException {
     private final String localizedMessage;
 
     public MockNotFoundException(String message, String localizedMessage) {
+        super(message); // Call super constructor
         this.message = message;
         this.localizedMessage = localizedMessage;
     }

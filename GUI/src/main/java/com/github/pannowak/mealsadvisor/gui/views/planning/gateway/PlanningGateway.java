@@ -13,7 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct; // Changed from javax.annotation
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.Collection;
