@@ -12,7 +12,7 @@ spec:
     env:
     - name: DOCKER_HOST
       value: "tcp://127.0.0.1:2475"
-    image: "adoptopenjdk:15-jdk-hotspot"
+    image: "eclipse-temurin:21-jdk"
     imagePullPolicy: IfNotPresent
     name: jdk
     volumeMounts:

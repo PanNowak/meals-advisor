@@ -59,6 +59,11 @@
             <artifactId>mockwebserver</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <!-- Version and scope are managed by the parent POM -->
+        </dependency>
     </dependencies>
 
     <build>

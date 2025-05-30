@@ -8,6 +8,7 @@ public final class MockServiceException extends ServiceException {
     private final String localizedMessage;
 
     public MockServiceException(String message, String localizedMessage) {
+        super(message); // Call super constructor
         this.message = message;
         this.localizedMessage = localizedMessage;
     }

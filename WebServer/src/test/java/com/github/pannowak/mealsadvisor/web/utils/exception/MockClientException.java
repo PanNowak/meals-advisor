@@ -8,6 +8,7 @@ public final class MockClientException extends ClientException {
     private final String localizedMessage;
 
     public MockClientException(String message, String localizedMessage) {
+        super(message); // Call super constructor
         this.message = message;
         this.localizedMessage = localizedMessage;
     }
