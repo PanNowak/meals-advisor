@@ -31,7 +31,7 @@ export class MealDetailsComponent implements OnInit, OnDestroy {
   nameControl = new FormControl('', [Validators.required]);
 
   allMealTypes$: Observable<MealType[]>;
-  mealTypesControl = new FormControl('', [Validators.required]);
+  mealTypesControl = new FormControl<MealType[]>([], [Validators.required]);
 
   noIngredientsAdded$: Observable<boolean>;
 

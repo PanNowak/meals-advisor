@@ -115,9 +115,13 @@ export class ProductCrudEffects {
     return this.store.select(getCachedProductDetails).pipe(
       first(),
       map(products => products[productIdToLoad]),
-      filter(isNotNullOrUndefined),
-      map(productDetails => setProductDetailsAction({product: productDetails.data})),
-      defaultIfEmpty<Action>(productDetailsFetchRequest({productId: productIdToLoad}))
+      switchMap(cachedProductDetails => {
+        if (cachedProductDetails && cachedProductDetails.data) { // Ensure data exists
+          return of(setProductDetailsAction({product: cachedProductDetails.data}));
+        } else {
+          return of(productDetailsFetchRequest({productId: productIdToLoad}));
+        }
+      })
     );
   }
 

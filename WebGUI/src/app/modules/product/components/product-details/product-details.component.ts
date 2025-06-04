@@ -34,7 +34,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   nameControl = new FormControl('', Validators.required, this.validatorsFactory.uniqueName());
 
   availablePrimaryUnits$: Observable<Unit[]>;
-  primaryUnitControl = new FormControl('', Validators.required);
+  primaryUnitControl = new FormControl<Unit | null>(null, Validators.required);
 
   validationMessage$: Observable<string>;
   isValidationFailed$: Observable<boolean>;

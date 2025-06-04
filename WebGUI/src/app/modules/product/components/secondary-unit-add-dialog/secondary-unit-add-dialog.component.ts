@@ -11,7 +11,7 @@ import {Observable} from 'rxjs';
 })
 export class SecondaryUnitAddDialogComponent {
 
-  selectedControl = new FormControl('', [
+  selectedControl = new FormControl<Unit | null>(null, [
     Validators.required,
   ]);
 
@@ -40,10 +40,18 @@ export class SecondaryUnitAddDialogComponent {
   }
 
   private createSecondaryUnitInfo(): SecondaryUnitInfo {
+    const selectedUnit = this.selectedControl.value;
+    const ratioValue = this.ratioControl.value;
+
+    if (!selectedUnit || ratioValue === null || ratioValue === undefined) {
+      // Form validation should ideally prevent this state.
+      throw new Error('Cannot create SecondaryUnitInfo with null values.');
+    }
+
     return {
       id: null,
-      unit: this.selectedControl.value,
-      toPrimaryUnitRatio: parseFloat(this.ratioControl.value)
+      unit: selectedUnit,
+      toPrimaryUnitRatio: parseFloat(ratioValue)
     };
   }
 }

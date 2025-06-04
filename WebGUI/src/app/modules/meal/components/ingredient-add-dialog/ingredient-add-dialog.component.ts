@@ -5,7 +5,7 @@ import {Store} from '@ngrx/store';
 import {AppState} from 'app/store/app.state';
 import {Ingredient} from 'app/modules/meal/models';
 import {getAvailableProducts} from 'app/modules/meal/store';
-import {areProductSummariesEqual, ProductSummary} from 'app/modules/product/models';
+import {areProductSummariesEqual, ProductSummary, Product} from 'app/modules/product/models';
 import {getAllUnitsOfLoadedProduct, productDetailsLoadRequest} from 'app/modules/product/store';
 import {selectedValueObservable} from 'app/modules/shared/control.observables';
 import {areUnitsEqual, Unit} from 'app/modules/unit/models';
@@ -19,7 +19,7 @@ import {filter} from 'rxjs/operators';
 export class IngredientAddDialogComponent implements OnInit, OnDestroy {
 
   availableProducts$: Observable<ProductSummary[]>;
-  selectedProductControl = new FormControl('', [
+  selectedProductControl = new FormControl<ProductSummary | null>(null, [
     Validators.required,
   ]);
 
@@ -29,7 +29,7 @@ export class IngredientAddDialogComponent implements OnInit, OnDestroy {
   ]);
 
   availableUnits: Unit[];
-  selectedUnitControl = new FormControl({value: '', disabled: true}, [
+  selectedUnitControl = new FormControl<Unit | null>({value: null, disabled: true}, [
     Validators.required,
   ]);
 
@@ -46,10 +46,11 @@ export class IngredientAddDialogComponent implements OnInit, OnDestroy {
       .pipe(filter(units => units.length > 0))
       .subscribe(units => {
         this.availableUnits = units;
-        this.selectedUnitControl.setValue(units[0]);
+        this.selectedUnitControl.setValue(units[0] ?? null);
         this.selectedUnitControl.enable();
       });
     this.controlsChangesSubscription = selectedValueObservable(this.selectedProductControl)
+      .pipe(filter((product): product is ProductSummary => product !== null)) // Type guard
       .subscribe(product => this.store.dispatch(productDetailsLoadRequest({productId: product.id})));
   }
 
@@ -79,11 +80,32 @@ export class IngredientAddDialogComponent implements OnInit, OnDestroy {
   }
 
   private createIngredient(): Ingredient {
+    // Ensure that selectedProductControl.value and selectedUnitControl.value are not null
+    // before creating the ingredient. The form validation should prevent this,
+    // but it's good practice to handle potential null values.
+    const productSummaryValue = this.selectedProductControl.value;
+    const unitValue = this.selectedUnitControl.value;
+    const amountValue = this.amountControl.value;
+
+    if (!productSummaryValue || !unitValue || amountValue === null || amountValue === undefined) {
+      // Or handle this error more gracefully, e.g., by disabling the add button
+      // or showing a message, though form validation should cover this.
+      throw new Error('Form values are not complete to create an ingredient.');
+    }
+
+    // Create a Product object from ProductSummary, fulfilling the Ingredient interface
+    const productForIngredient: Product = {
+      id: productSummaryValue.id,
+      name: productSummaryValue.name,
+      primaryUnit: null, // Or a sensible default if available/required
+      secondaryUnits: []  // Or null
+    };
+
     return {
       id: null,
-      numberOfUnits: parseFloat(this.amountControl.value),
-      product: this.selectedProductControl.value,
-      unit: this.selectedUnitControl.value
+      numberOfUnits: parseFloat(amountValue),
+      product: productForIngredient,
+      unit: unitValue
     };
   }
 }

@@ -19,7 +19,7 @@ import {PlanningModule} from 'app/modules/planning/planning.module';
     ProductModule,
     MealModule,
     PlanningModule,
-    RouterModule.forRoot(routes, { initialNavigation: 'enabled', relativeLinkResolution: 'legacy' }),
+    RouterModule.forRoot(routes, { initialNavigation: 'enabledNonBlocking' }),
     EffectsModule.forFeature([RoutingEffects])
   ],
   exports: [

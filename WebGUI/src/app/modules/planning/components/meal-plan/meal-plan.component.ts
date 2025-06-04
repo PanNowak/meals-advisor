@@ -72,8 +72,20 @@ export class MealPlanComponent implements OnInit {
 
   generatePlans(): void {
     this.shoppingList = [];
-    this.store.dispatch(mealPlanGenerationRequest(
-      {firstDay: this.firstDayControl.value, lastDay: this.lastDayControl.value}));
+    const firstDayValue = this.firstDayControl.value;
+    const lastDayValue = this.lastDayControl.value;
+
+    // Ensure values are not null or empty before converting
+    const firstDay = firstDayValue ? Number(firstDayValue) : null;
+    const lastDay = lastDayValue ? Number(lastDayValue) : null;
+
+    if (firstDay !== null && lastDay !== null) {
+      this.store.dispatch(mealPlanGenerationRequest(
+        {firstDay: firstDay, lastDay: lastDay}));
+    } else {
+      // Handle error case, e.g., show a message or rely on form validation
+      console.error('First day or last day is null after attempting to convert.');
+    }
   }
 
   showShoppingList(): void {
